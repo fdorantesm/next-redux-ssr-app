@@ -1,10 +1,10 @@
 import { Layout } from "src/layout/default";
 
-export default function Home() {
+export default function Order() {
   return (
     <>
       <Layout>
-        <h1>Home alone</h1>
+        <h1>Order</h1>
       </Layout>
     </>
   );
