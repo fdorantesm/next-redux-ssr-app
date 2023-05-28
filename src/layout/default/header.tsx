@@ -2,7 +2,6 @@ import { Box, Grid, IconButton, Typography } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import styled from "@emotion/styled";
 import SettingsIcon from "@mui/icons-material/Settings";
-import { useState } from "react";
 import { LetterAvatar } from "src/components/avatar";
 
 const Title = styled.div`
@@ -11,16 +10,9 @@ const Title = styled.div`
   margin-top: 1rem;
 `;
 
-export function Header() {
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-
-  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleUserMenuClose = () => {
-    setAnchorEl(null);
+export function Header(props: Props) {
+  const handleSettingsClick = () => {
+    props.onSettingsClick();
   };
 
   return (
@@ -39,7 +31,7 @@ export function Header() {
             <Grid item md={6}>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
                 <IconButton
-                  onClick={handleClick}
+                  onClick={handleSettingsClick}
                   size="small"
                   sx={{ mr: 1 }}
                   disableRipple
@@ -56,4 +48,8 @@ export function Header() {
       </Grid>
     </header>
   );
+}
+
+interface Props {
+  onSettingsClick(): any;
 }

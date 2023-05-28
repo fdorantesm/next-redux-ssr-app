@@ -1,7 +1,9 @@
 import {
   Alert,
   Button,
+  IconButton,
   Paper,
+  Stack,
   Switch,
   Table,
   TableBody,
@@ -13,6 +15,7 @@ import {
 import { useEffect, useState } from "react";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
+import AddIcon from "@mui/icons-material/Add";
 
 import { Layout } from "src/layout/default";
 import { getUsers } from "src/services/api/users/get-users";
@@ -21,7 +24,7 @@ import { Page } from "src/components/page";
 import { If } from "src/components/if";
 import { withAuth } from "src/hofs/with-auth";
 
-export default function () {
+export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
 
   useEffect(() => {
@@ -31,6 +34,11 @@ export default function () {
   return (
     <Layout>
       <Page title="Usuarios">
+        <Stack justifyContent={"end"} alignItems={"end"} mb={2}>
+          <Button color="success" variant="contained" size="small">
+            <AddIcon /> Agregar
+          </Button>
+        </Stack>
         <If condition={users?.length === 0}>
           <Alert color="info">No se ha creado ningún usuario</Alert>
         </If>
@@ -41,8 +49,10 @@ export default function () {
                 <TableRow>
                   <TableCell>Nombre</TableCell>
                   <TableCell>Email</TableCell>
-                  <TableCell>Activo</TableCell>
-                  <TableCell></TableCell>
+                  <TableCell sx={{ fontWeight: 600 }} width={100} align="right">
+                    Activo
+                  </TableCell>
+                  <TableCell width={150}></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
@@ -57,7 +67,7 @@ export default function () {
                     <TableCell component="th" scope="row">
                       {row.email}
                     </TableCell>
-                    <TableCell>
+                    <TableCell align="right" width={100}>
                       <Switch
                         name="isActive"
                         value={row.uuid}
@@ -67,13 +77,15 @@ export default function () {
                         color={"success"}
                       />
                     </TableCell>
-                    <TableCell>
-                      <Button>
-                        <EditIcon></EditIcon>
-                      </Button>
-                      <Button>
-                        <DeleteIcon></DeleteIcon>
-                      </Button>
+                    <TableCell align="right" width={100}>
+                      <Stack justifyContent={"end"} direction={"row"}>
+                        <IconButton color="inherit" size="small">
+                          <EditIcon></EditIcon>
+                        </IconButton>
+                        <IconButton color="error" size="small">
+                          <DeleteIcon></DeleteIcon>
+                        </IconButton>
+                      </Stack>
                     </TableCell>
                   </TableRow>
                 ))}

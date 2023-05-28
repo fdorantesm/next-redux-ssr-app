@@ -5,6 +5,7 @@ import {
   DialogTitle,
   FormControl,
   FormGroup,
+  Stack,
   TextField,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
@@ -13,45 +14,56 @@ import { getSettings } from "src/services/api/settings/get-settings";
 import { updateSettings } from "src/services/api/settings/update-settings";
 import { Settings } from "src/types/settings.type";
 
+const initialState = {
+  kilogramPerPlant: 0,
+  pricePerPlantKilogram: 0,
+};
+
 export function SettingsModal(props: Props) {
   const snackbar = useSnackbar();
-  const [formData, setFormData] = useState<SettingsPayload>({
-    kilogramPerPlant: 0,
-    pricePerPlantKilogram: 0,
-  });
+  const [data, setData] = useState<SettingsPayload>(initialState);
+  const [formData, setFormData] = useState<SettingsPayload>(initialState);
 
   useEffect(() => {
-    console.log("useEffect");
-    getSettings().then(setFormData);
+    getSettings().then((settings) => {
+      setFormData(settings);
+      setData(settings);
+    });
   }, []);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { type, value, name } = e.target;
-    const isNumber = type === "number";
+    const { value, name } = e.target;
     setFormData({
       ...formData,
-      [name]: isNumber ? Number(value) : value,
+      [name]: value,
     });
   };
 
   const handleSubmit = async (e: any) => {
     e.preventDefault();
     const response = await updateSettings({
-      kilogramPerPlant: formData.kilogramPerPlant,
-      pricePerPlantKilogram: formData.pricePerPlantKilogram,
+      kilogramPerPlant: Number(formData.kilogramPerPlant),
+      pricePerPlantKilogram: Number(formData.pricePerPlantKilogram),
     });
 
-    setFormData(response);
+    setData(response);
 
     snackbar.enqueueSnackbar({
       variant: "success",
       autoHideDuration: 3000,
       message: "Los datos fueron guardados con éxico",
     });
+
+    props.handleClose();
+  };
+
+  const handleCancel = () => {
+    setFormData(data);
+    props.handleCancel();
   };
 
   return (
-    <Dialog open={true}>
+    <Dialog open={props.isOpen} onClose={props.handleClose}>
       <DialogTitle>Configuración</DialogTitle>
       <DialogContent>
         <form onSubmit={handleSubmit}>
@@ -85,9 +97,14 @@ export function SettingsModal(props: Props) {
             </FormControl>
           </FormGroup>
           <FormGroup>
-            <Button type={"submit"} variant="contained">
-              Guardar
-            </Button>
+            <Stack direction="row" spacing={2}>
+              <Button type={"button"} variant="text" onClick={handleCancel}>
+                Cancelar
+              </Button>
+              <Button type={"submit"} variant="contained">
+                Guardar
+              </Button>
+            </Stack>
           </FormGroup>
         </form>
       </DialogContent>
@@ -96,7 +113,10 @@ export function SettingsModal(props: Props) {
 }
 
 interface Props {
+  isOpen: boolean;
   // onSubmit(data: Omit<Settings, "uuid">): Omit<Settings, "uuid">;
+  handleClose(): any;
+  handleCancel(): any;
 }
 
 type SettingsPayload = Omit<Settings, "uuid">;
