@@ -1,8 +1,8 @@
-import { createSlice } from '@reduxjs/toolkit';
-import type { PayloadAction } from '@reduxjs/toolkit';
+import { createSlice } from "@reduxjs/toolkit";
+import type { PayloadAction } from "@reduxjs/toolkit";
 
-import { Reducer } from '../reducers.enum';
-import { AuthState } from 'src/store/types/auth-state.type';
+import { Reducer } from "../reducers.enum";
+import { AuthState } from "src/store/types/auth-state.type";
 
 const initialState: AuthState = { token: null };
 
@@ -15,8 +15,8 @@ const authSlice = createSlice({
     },
     removeToken(state) {
       state.token = null;
-    }
-  }
+    },
+  },
 });
 
 export const { setToken, removeToken } = authSlice.actions;

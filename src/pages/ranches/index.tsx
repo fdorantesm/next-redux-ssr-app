@@ -2,11 +2,11 @@ import { Page } from "src/components/page";
 import { withAuth } from "src/hofs/with-auth";
 import { Layout } from "src/layout/default";
 
-export default function Home() {
+export default function Ranches() {
   return (
     <>
       <Layout>
-        <Page title="Home">
+        <Page title="Ranchos">
           <p>
             Lorem ipsum dolor sit amet, consectetur adipisicing elit. Quia unde
             autem vel error at molestias voluptatem neque, exercitationem
@@ -21,8 +21,6 @@ export default function Home() {
 
 export const getServerSideProps = withAuth((ctx: any) => {
   return {
-    props: {
-      message: "hello",
-    },
+    props: {},
   };
 });

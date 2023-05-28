@@ -1,24 +1,25 @@
-import { Provider, useDispatch, useSelector } from "react-redux";
+import { Provider } from "react-redux";
 import { AppProps } from "next/app";
 import { PersistGate } from "redux-persist/integration/react";
 import { SnackbarProvider } from "notistack";
-import { v4 as uuid } from "uuid";
 
 import { store, wrapper, persistor } from "../store/store";
-import { setCartKey } from "src/store/modules/slices/cart.slice";
-import { RootState } from "src/store/types/root-state.type";
+
+import "../styles/main.scss";
+import { CssBaseline } from "@mui/material";
 
 function App({ Component, pageProps }: AppProps) {
-  const key = useSelector((state: RootState) => state.cart.key);
-  const dispatch = useDispatch();
-  const cartKey = key || uuid();
-  console.log("app:", key, cartKey);
-  dispatch(setCartKey(cartKey));
+  const AppComponent = () => (
+    <>
+      <CssBaseline />
+      <Component {...pageProps} />
+    </>
+  );
 
   if (typeof window === "undefined") {
     <Provider store={store}>
       <SnackbarProvider maxSnack={3}>
-        <Component {...pageProps} />
+        <AppComponent />
       </SnackbarProvider>
     </Provider>;
   }
@@ -30,7 +31,7 @@ function App({ Component, pageProps }: AppProps) {
           maxSnack={3}
           anchorOrigin={{ vertical: "bottom", horizontal: "right" }}
         >
-          <Component {...pageProps} />
+          <AppComponent />
         </SnackbarProvider>
       </PersistGate>
     </Provider>

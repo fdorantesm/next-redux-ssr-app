@@ -1,57 +1,59 @@
-import { Box, Container, Grid } from "@mui/material";
-import Link from "next/link";
-import React, { useEffect, useLayoutEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import ShoppingBasketIcon from "@mui/icons-material/ShoppingBasket";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
+import DashboardIcon from "@mui/icons-material/Dashboard";
+import styled from "@emotion/styled";
+import SettingsIcon from "@mui/icons-material/Settings";
+import { useState } from "react";
+import { LetterAvatar } from "src/components/avatar";
 
-import { RootState } from "src/store/types/root-state.type";
-import { getCart } from "src/services/api/cart/get-cart";
-import { setCart, setDiscount } from "src/store/modules/slices/cart.slice";
-import { calcDiscount } from "src/utils/coupons/calc-discount.util";
+const Title = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+`;
 
 export function Header() {
-  const { cart, coupon } = useSelector((state: RootState) => ({
-    cart: state.cart,
-    coupon: state.coupon,
-  }));
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
 
-  const dispatch = useDispatch();
+  const handleClick = (event: React.MouseEvent<HTMLElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
-  useEffect(() => {
-    getCart(cart.key).then((cartContent) => {
-      const discount = coupon.code
-        ? calcDiscount(cart.total, coupon.discountType, coupon.discount)
-        : 0;
-      dispatch(
-        setCart({
-          key: cartContent.uuid,
-          items: cartContent.items,
-          total: cartContent.total,
-        })
-      );
-      dispatch(setDiscount(discount));
-    });
-  }, [cart.total, coupon.code]);
+  const handleUserMenuClose = () => {
+    setAnchorEl(null);
+  };
 
   return (
-    <>
-      <header>
-        <Container>
+    <header style={{ margin: "1rem 0 2rem" }}>
+      <Grid container>
+        <Grid item md={11} mx={"auto"}>
           <Grid container>
             <Grid item md={6}>
-              <Link href={"/"}>Home</Link>
+              <Title>
+                <DashboardIcon fontSize={"large"} sx={{ mr: 1 }} />
+                <Typography variant="h6" color="initial">
+                  Panel de Administración
+                </Typography>
+              </Title>
             </Grid>
             <Grid item md={6}>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <ShoppingBasketIcon color="success" />
-                <span style={{ marginLeft: "0.5rem", marginTop: "2px" }}>
-                  ${cart.total - cart.discount}
-                </span>
+                <IconButton
+                  onClick={handleClick}
+                  size="small"
+                  sx={{ mr: 1 }}
+                  disableRipple
+                >
+                  <SettingsIcon />
+                </IconButton>
+                <IconButton>
+                  <LetterAvatar></LetterAvatar>
+                </IconButton>
               </Box>
             </Grid>
           </Grid>
-        </Container>
-      </header>
-    </>
+        </Grid>
+      </Grid>
+    </header>
   );
 }

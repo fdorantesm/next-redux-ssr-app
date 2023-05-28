@@ -1,0 +1,24 @@
+html {
+  @extend .view;
+  margin: 0;
+  padding: 0;
+}
+
+.view {
+  height: 100vh;
+  min-height: 100vh;
+  &--inherit {
+    height: inherit;
+    min-height: inherit;
+  }
+}
+
+body {
+  @extend .view--inherit;
+}
+
+#__next {
+  @extend .view--inherit;
+  display: flex;
+  flex-direction: column;
+}
