@@ -49,10 +49,10 @@ export function Nav({ children }: any) {
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    cookies.set("token", "");
     router.push(`/auth/login`);
     dispatch(setToken(""));
     dispatch(setUser(""));
+    cookies.set("token", "");
     enqueueSnackbar("Cerrando sesión...", {
       variant: "info",
       autoHideDuration: 500,

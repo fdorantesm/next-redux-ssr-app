@@ -49,6 +49,7 @@ export default function Users() {
                 <TableRow>
                   <TableCell>Nombre</TableCell>
                   <TableCell>Email</TableCell>
+                  <TableCell>Teléfono</TableCell>
                   <TableCell sx={{ fontWeight: 600 }} width={100} align="right">
                     Activo
                   </TableCell>
@@ -62,10 +63,13 @@ export default function Users() {
                     sx={{ "& > *": { borderBottom: "unset" } }}
                   >
                     <TableCell component="th" scope="row">
-                      {row.profile.name}
+                      {row?.profile?.name}
                     </TableCell>
                     <TableCell component="th" scope="row">
                       {row.email}
+                    </TableCell>
+                    <TableCell component="th" scope="row">
+                      {row?.profile?.phone}
                     </TableCell>
                     <TableCell align="right" width={100}>
                       <Switch
