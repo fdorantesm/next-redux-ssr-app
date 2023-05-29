@@ -9,20 +9,18 @@ import { useSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
 import { useRouter } from "next/router";
 import cookies from "js-cookie";
-
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
 import AgricultureIcon from "@mui/icons-material/Agriculture";
+import HandshakeIcon from "@mui/icons-material/Handshake";
 
 import { NavItem } from "./nav-item";
 import { setToken } from "src/store/modules/slices/auth.slice";
 import { setUser } from "src/store/modules/slices/user/user.slice";
 import { config } from "src/config/config";
 import { AgaveIcon } from "src/components/icons/agave/agave";
-import HandshakeIcon from "@mui/icons-material/Handshake";
 import { InvestingIcon } from "src/components/icons";
-import SettingsIcon from "@mui/icons-material/Settings";
 
 const drawerWidth = 65;
 
