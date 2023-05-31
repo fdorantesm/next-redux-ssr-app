@@ -7,6 +7,9 @@ import { Footer } from "./footer";
 import { Header } from "./header";
 import { Nav } from "./nav";
 import { SettingsModal } from "src/components/modals/settings/settings.modal";
+import { useSelector } from "react-redux";
+import { RootState } from "src/store/types/root-state.type";
+import { useRouter } from "next/router";
 
 const LayoutStyles = styled.div`
   height: inherit;
@@ -28,6 +31,8 @@ const PageStyles = styled.div`
 `;
 
 export const Layout = (props: ScriptProps) => {
+  const token = useSelector((root: RootState) => root.auth.token);
+  const router = useRouter();
   const [settingsModalState, setSettingsModalState] = useState(false);
 
   const handleSettingsClick = () => {
@@ -40,6 +45,10 @@ export const Layout = (props: ScriptProps) => {
   const handleSettingsModalCancel = () => {
     setSettingsModalState(false);
   };
+
+  if (!token) {
+    router.push("/auth/login");
+  }
 
   return (
     <>

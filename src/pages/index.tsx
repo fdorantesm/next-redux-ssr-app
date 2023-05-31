@@ -1,5 +1,3 @@
-import cookie from "cookie";
-
 import { Page } from "src/components/page";
 import { withAuth } from "src/hofs/with-auth";
 import { Layout } from "src/layout/default";

@@ -17,10 +17,11 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 
 import { NavItem } from "./nav-item";
 import { setToken } from "src/store/modules/slices/auth.slice";
-import { setUser } from "src/store/modules/slices/user/user.slice";
+import { setUser, unsetUser } from "src/store/modules/slices/user.slice";
 import { config } from "src/config/config";
 import { AgaveIcon } from "src/components/icons/agave/agave";
 import { InvestingIcon } from "src/components/icons";
+import { IconButton } from "@mui/material";
 
 const drawerWidth = 65;
 
@@ -47,14 +48,14 @@ export function Nav({ children }: any) {
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    router.push(`/auth/login`);
     dispatch(setToken(""));
-    dispatch(setUser(""));
+    dispatch(unsetUser());
     cookies.set("token", "");
     enqueueSnackbar("Cerrando sesión...", {
       variant: "info",
       autoHideDuration: 500,
     });
+    router.push(`/auth/login`);
   };
 
   const theme = useTheme();
@@ -66,64 +67,50 @@ export function Nav({ children }: any) {
           style={{ display: "flex", justifyContent: "center" }}
           theme={theme}
         >
-          <Link href="/">
-            <a style={{ display: "block" }}>
-              <Image src="/favicon.ico" alt="Logo" width={32} height={32} />
+          <Link className="mmm" href="/">
+            <a>
+              <Image src="/icon.svg" alt="Logo" width={32} height={32} />
             </a>
           </Link>
         </DrawerHeader>
         <Divider />
         <List>
           <NavItem>
-            <Link href="/" role="button">
-              <a style={{ display: "block" }}>
-                <HomeIcon htmlColor={config.primaryColor} />
-              </a>
+            <Link className="mmm" href="/" role="button">
+              <HomeIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link href="/plants" role="button">
-              <a style={{ display: "block" }}>
-                <AgaveIcon htmlColor={config.primaryColor} />
-              </a>
+            <Link className="mmm" href="/plants" role="button">
+              <AgaveIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link href="/ranches" role="button">
-              <a style={{ display: "block" }}>
-                <AgricultureIcon htmlColor={config.primaryColor} />
-              </a>
+            <Link className="mmm" href="/ranches" role="button">
+              <AgricultureIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link href="/investments" role="button">
-              <a style={{ display: "block" }}>
-                <InvestingIcon htmlColor={config.primaryColor} />
-              </a>
+            <Link className="mmm" href="/investments" role="button">
+              <InvestingIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link href="/partners" role="button">
-              <a style={{ display: "block" }}>
-                <HandshakeIcon htmlColor={config.primaryColor} />
-              </a>
+            <Link className="mmm" href="/partners" role="button">
+              <HandshakeIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link href="/users" role="button">
-              <a style={{ display: "block" }}>
-                <ManageAccountsIcon htmlColor={config.primaryColor} />
-              </a>
+            <Link className="mmm" href="/users" role="button">
+              <ManageAccountsIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
         </List>
         <Divider></Divider>
-        <List>
-          <NavItem>
-            <a href="#" onClick={handleLogout}>
-              <ExitToAppIcon htmlColor={config.primaryColor} />
-            </a>
-          </NavItem>
+        <List sx={{ display: "flex", direction: "column", marginX: "auto" }}>
+          <IconButton onClick={handleLogout}>
+            <ExitToAppIcon htmlColor={config.primaryColor} />
+          </IconButton>
         </List>
       </Drawer>
     </>

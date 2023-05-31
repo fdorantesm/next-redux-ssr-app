@@ -1,7 +1,12 @@
 import { apiClient } from "..";
+import { LoginResponse } from "./types/login.response.type";
+import { LoginSuccess } from "./types/login.success.type";
 
-export async function login(email: string, password: string) {
-  const response = await apiClient.post("/auth/login", {
+export async function login(
+  email: string,
+  password: string
+): Promise<LoginResponse> {
+  const { data: response } = await apiClient.post<LoginSuccess>("/auth/login", {
     email,
     password,
   });

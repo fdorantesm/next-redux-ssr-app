@@ -14,8 +14,8 @@ import DeleteIcon from "@mui/icons-material/Delete";
 
 export function DatatTable(props: Props) {
   return (
-    <TableContainer component={Paper}>
-      <Table aria-label="collapsible table" size="small">
+    <TableContainer component={Paper} variant="outlined">
+      <Table aria-label="collapsible table" size="medium">
         <TableHead>
           <TableRow>
             {props.headers.map((label, index) => (

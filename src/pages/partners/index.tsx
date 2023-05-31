@@ -36,13 +36,13 @@ export default function Partners() {
       <Layout>
         <Page title="Socios">
           <Stack justifyContent={"end"} alignItems={"end"} mb={2}>
-            <Button color="success" variant="contained" size="small">
+            <Button color="success" variant="contained" size="medium">
               <AddIcon /> Agregar
             </Button>
           </Stack>
           <If condition={partners?.length > 0}>
-            <TableContainer component={Paper}>
-              <Table aria-label="collapsible table" size="small">
+            <TableContainer component={Paper} variant="outlined">
+              <Table aria-label="collapsible table" size="medium">
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>

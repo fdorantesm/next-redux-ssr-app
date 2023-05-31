@@ -10,11 +10,10 @@ import {
   TextField,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 
 import { PasswordField } from "src/components/password-field";
-import { getUser } from "src/services/api/users/get-user";
-import { updateUser } from "src/services/api/users/update-user.service";
+import { createUser } from "src/services/api/users/create-user.service";
 import { RegisterPayload } from "src/types/register.payload.type";
 import { User } from "src/types/user.type";
 
@@ -25,21 +24,9 @@ const initialState: RegisterPayload = {
   password: "",
 };
 
-export function UpdateUserModal(props: Props) {
+export function AddUserModal(props: Props) {
   const snackbar = useSnackbar();
   const [formData, setFormData] = useState(initialState);
-
-  useEffect(() => {
-    getUser(props.userId).then((user) => {
-      console.log(user.email);
-      setFormData({
-        email: user.email,
-        name: user?.profile?.name!,
-        phone: user?.profile?.phone!,
-        password: "",
-      });
-    });
-  }, [props.userId]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;
@@ -50,24 +37,22 @@ export function UpdateUserModal(props: Props) {
   };
 
   const handleSubmit = async () => {
-    const payload: Partial<User> & { password?: string } = {
+    const payload: Partial<User & { password: string }> = {
       email: formData.email,
+      password: formData.password,
       profile: {
         name: formData.name,
         phone: formData.phone,
       },
     };
 
-    if (formData.password) {
-      payload.password = formData.password;
-    }
-
-    const user = await updateUser(props.userId, payload);
+    const user = await createUser(payload);
     props.onCreate(user!);
+    setFormData(initialState);
     snackbar.enqueueSnackbar({
       variant: "success",
       autoHideDuration: 3000,
-      message: "Usuario actualizado correctamente",
+      message: "Usuario creado correctamente",
     });
 
     props.onClose();
@@ -78,10 +63,10 @@ export function UpdateUserModal(props: Props) {
       open={props.isOpen}
       maxWidth={"xs"}
       fullWidth
-      key={"update-user-modal"}
+      key={"create-user-modal"}
     >
       <DialogTitle>
-        <Box p={1}>Actualizar usuario</Box>
+        <Box p={1}>Crear usuario</Box>
       </DialogTitle>
       <DialogContent>
         <Stack px={1}>
@@ -130,10 +115,11 @@ export function UpdateUserModal(props: Props) {
           <FormControl sx={{ mt: 1 }} variant="outlined" fullWidth>
             <PasswordField
               fullWidth
+              onChange={handleInputChange}
+              value={formData.password}
               name="password"
               id="password"
-              value={formData.password}
-              onChange={handleInputChange}
+              label="Contraseña"
             />
           </FormControl>
         </Stack>
@@ -169,5 +155,4 @@ interface Props {
   onClose(): any;
   onCancel(): any;
   onCreate(data: User): any;
-  userId: string;
 }

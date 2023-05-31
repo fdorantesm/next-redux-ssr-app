@@ -2,17 +2,21 @@ import { AxiosRequestConfig } from "axios";
 
 import { apiClient } from "..";
 import { getBearerAuth } from "../utils/get-bearer-auth.util";
-import { MeUserSuccess } from "./types/me-user.success.type";
 
-export async function me(config?: AxiosRequestConfig) {
+export async function deleteUser(
+  uuid: string,
+  config?: AxiosRequestConfig
+): Promise<void> {
   const bearer = await getBearerAuth();
-  const { data: response } = await apiClient.get<MeUserSuccess>("/auth/me", {
+  const settings = {
     ...config,
     headers: {
       ...bearer,
       ...config?.headers,
     },
-  });
+  };
 
-  return response.data;
+  await apiClient.delete(`/v1/users/${uuid}`, settings);
+
+  return undefined;
 }

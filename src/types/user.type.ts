@@ -6,4 +6,5 @@ export type User = {
     phone: string;
   };
   isActive: boolean;
+  scopes: string[];
 };

@@ -6,31 +6,28 @@ import { useDispatch } from "react-redux";
 import { useSnackbar } from "notistack";
 import Head from "next/head";
 import {
-  CssBaseline,
   Box,
   Button,
   OutlinedInput,
-  InputAdornment,
-  IconButton,
   FormControl,
   InputLabel,
+  Stack,
 } from "@mui/material";
-import { Visibility, VisibilityOff } from "@mui/icons-material";
 import Image from "next/image";
 import cookie from "js-cookie";
 
 import { setToken } from "src/store/modules/slices/auth.slice";
-import { setUser } from "src/store/modules/slices/user/user.slice";
+import { setUser } from "src/store/modules/slices/user.slice";
 import { login } from "src/services/api/auth/login";
 import { me } from "src/services/api/auth/me";
 import { FullCentered } from "src/components/full-centered.styled";
+import { PasswordField } from "src/components/password-field";
 
 export default function LoginPage() {
   const router = useRouter();
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  const [isPasswordVisible, setPasswordVisible] = useState(false);
   const [credentials, setCredentials] = useState({
     email: "",
     password: "",
@@ -41,20 +38,16 @@ export default function LoginPage() {
     setCredentials({ ...credentials, [target.name]: target.value });
   };
 
-  const handlePasswordType = () => {
-    setPasswordVisible(!isPasswordVisible);
-  };
-
   const handleSubmit = async (e: SyntheticEvent) => {
     try {
       e.preventDefault();
       const nextUrl = String(router.query.next || "/");
-      const response = await login(credentials.email, credentials.password);
-      const token = response.data.accessToken;
+      const token = await login(credentials.email, credentials.password);
+      const accessToken = token.accessToken;
 
-      const { data: user } = await me({
+      const user = await me({
         headers: {
-          Authorization: `Bearer ${token}`,
+          Authorization: `Bearer ${accessToken}`,
         },
       });
 
@@ -65,7 +58,7 @@ export default function LoginPage() {
         throw Error;
       }
 
-      dispatch(setToken(response.data.accessToken));
+      dispatch(setToken(accessToken));
       dispatch(setUser(user));
 
       enqueueSnackbar("Inicio de sesión exitoso.", {
@@ -73,8 +66,8 @@ export default function LoginPage() {
         autoHideDuration: 1000,
       });
 
-      cookie.set("token", response.data.accessToken, {
-        expires: response.data.expiresAt,
+      cookie.set("token", accessToken, {
+        expires: token.expiresAt,
       });
 
       router.push(nextUrl);
@@ -92,23 +85,24 @@ export default function LoginPage() {
           <title>Iniciar sesión | Admin</title>
         </Head>
         <Container component="main" maxWidth="xs">
-          <Box
+          <Stack
             sx={{
               display: "flex",
               flexDirection: "column",
               alignItems: "center",
               justifyContent: "center",
-              marginBottom: 25,
             }}
           >
-            <Image src={"/vercel.svg"} width={150} height={150}></Image>
+            <Box marginBottom={3}>
+              <Image src={"/logo.svg"} width={250} height={250}></Image>
+            </Box>
             <Box
               component="form"
               onSubmit={handleSubmit}
               noValidate
               sx={{ mt: 1 }}
             >
-              <FormControl sx={{ mt: 1 }} variant="outlined" fullWidth>
+              <FormControl variant="outlined" fullWidth>
                 <InputLabel htmlFor="email">Correo electrónico</InputLabel>
                 <OutlinedInput
                   required
@@ -123,25 +117,11 @@ export default function LoginPage() {
                 />
               </FormControl>
               <FormControl sx={{ mt: 1 }} variant="outlined" fullWidth>
-                <InputLabel htmlFor="password">Contraseña</InputLabel>
-                <OutlinedInput
+                <PasswordField
                   name="password"
                   fullWidth
-                  id="password"
-                  type={isPasswordVisible ? "text" : "password"}
                   value={credentials.password}
                   onChange={handleChange}
-                  endAdornment={
-                    <InputAdornment position="end">
-                      <IconButton
-                        aria-label="toggle password visibility"
-                        onClick={handlePasswordType}
-                        edge="end"
-                      >
-                        {isPasswordVisible ? <VisibilityOff /> : <Visibility />}
-                      </IconButton>
-                    </InputAdornment>
-                  }
                   label="Contraseña"
                 />
               </FormControl>
@@ -152,12 +132,13 @@ export default function LoginPage() {
                   sx={{ mt: 3, mb: 2 }}
                   fullWidth
                   size="large"
+                  color={"info"}
                 >
                   Iniciar sesión
                 </Button>
               </FormControl>
             </Box>
-          </Box>
+          </Stack>
         </Container>
       </FullCentered>
     </>

@@ -57,15 +57,15 @@ export default function Plants() {
             <Button
               color="success"
               variant="contained"
-              size="small"
+              size="medium"
               onClick={handleAddPlantModalOpen}
             >
               <AddIcon /> Agregar
             </Button>
           </Stack>
           <If condition={plants?.length > 0}>
-            <TableContainer component={Paper}>
-              <Table aria-label="collapsible table" size="small">
+            <TableContainer component={Paper} variant="outlined">
+              <Table aria-label="collapsible table" size="medium">
                 <TableHead>
                   <TableRow>
                     <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
