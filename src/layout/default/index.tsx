@@ -1,15 +1,15 @@
 import { ScriptProps } from "next/script";
 import { CssBaseline } from "@mui/material";
 import styled from "@emotion/styled";
-import { useState } from "react";
+import { useLayoutEffect, useState } from "react";
+import { useSelector } from "react-redux";
+import { useRouter } from "next/router";
 
 import { Footer } from "./footer";
 import { Header } from "./header";
 import { Nav } from "./nav";
 import { SettingsModal } from "src/components/modals/settings/settings.modal";
-import { useSelector } from "react-redux";
 import { RootState } from "src/store/types/root-state.type";
-import { useRouter } from "next/router";
 
 const LayoutStyles = styled.div`
   height: inherit;
@@ -32,8 +32,8 @@ const PageStyles = styled.div`
 
 export const Layout = (props: ScriptProps) => {
   const token = useSelector((root: RootState) => root.auth.token);
-  const router = useRouter();
   const [settingsModalState, setSettingsModalState] = useState(false);
+  const [closing, setClosing] = useState(false);
 
   const handleSettingsClick = () => {
     setSettingsModalState(true);
@@ -46,16 +46,18 @@ export const Layout = (props: ScriptProps) => {
     setSettingsModalState(false);
   };
 
-  if (!token) {
-    router.push("/auth/login");
-  }
+  useLayoutEffect(() => {
+    if (!token) {
+      setClosing(true);
+    }
+  }, [token]);
 
   return (
     <>
       <LayoutStyles className="page">
         <CssBaseline />
         <>
-          <Nav></Nav>
+          <Nav />
           <PageStyles>
             <Header onSettingsClick={handleSettingsClick} />
             <MainStyles className="main">{props.children}</MainStyles>

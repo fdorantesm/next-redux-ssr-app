@@ -7,7 +7,6 @@ import Image from "next/image";
 import Link from "next/link";
 import { useSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
-import { useRouter } from "next/router";
 import cookies from "js-cookie";
 import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
@@ -17,11 +16,12 @@ import HandshakeIcon from "@mui/icons-material/Handshake";
 import { IconButton } from "@mui/material";
 
 import { NavItem } from "./nav-item";
-import { setToken } from "src/store/modules/slices/auth.slice";
-import { setUser, unsetUser } from "src/store/modules/slices/user.slice";
+import { removeToken } from "src/store/modules/slices/auth.slice";
+import { unsetUser } from "src/store/modules/slices/user.slice";
 import { config } from "src/config/config";
 import { AgaveIcon } from "src/components/icons/agave/agave";
 import { InvestingIcon } from "src/components/icons";
+import { useRouter } from "next/router";
 
 const drawerWidth = 65;
 
@@ -43,19 +43,19 @@ const Drawer = styled(MuiDrawer)(() => ({
 
 export function Nav({ children }: any) {
   const dispatch = useDispatch();
-  const router = useRouter();
   const { enqueueSnackbar } = useSnackbar();
+  const router = useRouter();
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    dispatch(setToken(''));
+    dispatch(removeToken());
     dispatch(unsetUser());
     cookies.set("token", "");
     enqueueSnackbar("Cerrando sesión...", {
       variant: "info",
       autoHideDuration: 500,
     });
-    router.push(`/auth/login`);
+    router.push("/auth/login");
   };
 
   const theme = useTheme();
@@ -67,7 +67,7 @@ export function Nav({ children }: any) {
           style={{ display: "flex", justifyContent: "center" }}
           theme={theme}
         >
-          <Link className="mmm" href="/">
+          <Link href="/">
             <a>
               <Image src="/icon.svg" alt="Logo" width={32} height={32} />
             </a>
@@ -76,32 +76,32 @@ export function Nav({ children }: any) {
         <Divider />
         <List>
           <NavItem>
-            <Link className="mmm" href="/" role="button">
+            <Link href="/" role="button">
               <HomeIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link className="mmm" href="/plants" role="button">
+            <Link href="/plants" role="button">
               <AgaveIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link className="mmm" href="/ranches" role="button">
+            <Link href="/ranches" role="button">
               <AgricultureIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link className="mmm" href="/investments" role="button">
+            <Link href="/investments" role="button">
               <InvestingIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link className="mmm" href="/partners" role="button">
+            <Link href="/partners" role="button">
               <HandshakeIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>
           <NavItem>
-            <Link className="mmm" href="/users" role="button">
+            <Link href="/users" role="button">
               <ManageAccountsIcon htmlColor={config.primaryColor} />
             </Link>
           </NavItem>

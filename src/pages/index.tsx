@@ -19,14 +19,3 @@ export default function Home() {
     </>
   );
 }
-
-export const getServerSideProps = withAuth(async (ctx: any) => {
-  try {
-    await health();
-  } catch (error) {}
-  return {
-    props: {
-      message: "hello",
-    },
-  };
-});

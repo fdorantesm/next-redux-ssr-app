@@ -9,7 +9,7 @@ import {
   TextField,
 } from "@mui/material";
 import { useSnackbar } from "notistack";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import { getSettings } from "src/services/api/settings/get-settings";
 import { updateSettings } from "src/services/api/settings/update-settings";
 import { Settings } from "src/types/settings.type";
@@ -24,12 +24,14 @@ export function SettingsModal(props: Props) {
   const [data, setData] = useState<SettingsPayload>(initialState);
   const [formData, setFormData] = useState<SettingsPayload>(initialState);
 
-  useEffect(() => {
-    getSettings().then((settings) => {
-      setFormData(settings);
-      setData(settings);
-    });
-  }, []);
+  useLayoutEffect(() => {
+    if (props.isOpen) {
+      getSettings().then((settings) => {
+        setFormData(settings);
+        setData(settings);
+      });
+    }
+  }, [props.isOpen]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { value, name } = e.target;

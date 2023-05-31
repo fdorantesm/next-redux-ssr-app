@@ -31,12 +31,16 @@ import {
 } from "src/utils/date";
 import { If } from "src/components/if";
 import { formatCurrency } from "src/utils/format-currency.util";
+import { Skeleton } from "src/components/skeleton";
 
 export default function Ranches() {
   const [ranches, setRanches] = useState<Ranch[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    getRanches().then(setRanches);
+    getRanches()
+      .then(setRanches)
+      .finally(() => setLoading(false));
   }, []);
 
   return (
@@ -48,59 +52,79 @@ export default function Ranches() {
               <AddIcon /> Agregar
             </Button>
           </Stack>
-          <If condition={ranches?.length > 0}>
-            <TableContainer component={Paper} variant="outlined">
-              <Table aria-label="collapsible table" size="medium">
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Descripción</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Planta</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      Precio por planta
+          <TableContainer component={Paper} variant="outlined">
+            <Table aria-label="collapsible table" size="medium">
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Nombre</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Descripción</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Planta</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Precio por planta</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Precio por kg</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Kg / Planta</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>
+                    <Skeleton loading={loading}>Jima estimada</Skeleton>
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }} width={100} align="right">
+                    <Skeleton loading={loading}>Activo</Skeleton>
+                  </TableCell>
+                  <TableCell align="right" width={150}>
+                    <Skeleton loading={loading}></Skeleton>
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {ranches.map((row: Ranch) => (
+                  <TableRow
+                    key={row.uuid}
+                    sx={{ "& > *": { borderBottom: "unset" } }}
+                  >
+                    <TableCell component="th" scope="row">
+                      <Skeleton loading={loading}>{row.name}</Skeleton>
                     </TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Precio Kg</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Kg / Planta</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      Jima estimada
+                    <TableCell component="th" scope="row">
+                      <Skeleton loading={loading}>{row.description}</Skeleton>
                     </TableCell>
-                    <TableCell
-                      sx={{ fontWeight: 600 }}
-                      width={100}
-                      align="right"
-                    >
-                      Activo
-                    </TableCell>
-                    <TableCell align="right" width={150}></TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {ranches.map((row: Ranch) => (
-                    <TableRow
-                      key={row.uuid}
-                      sx={{ "& > *": { borderBottom: "unset" } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        {row.name}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        {row.description}
-                      </TableCell>
-                      <TableCell component="th" scope="row">
+                    <TableCell component="th" scope="row">
+                      <Skeleton loading={loading}>
                         {row.plants![0].name}
-                      </TableCell>
-                      <TableCell>
+                      </Skeleton>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton loading={loading}>
                         {formatCurrency(row.plants![0].plantPurchasePrice)}
-                      </TableCell>
-                      <TableCell>
+                      </Skeleton>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton loading={loading}>
                         {formatCurrency(row.plants![0].plantKilogramSalesPrice)}
-                      </TableCell>
-                      <TableCell>{row.plants![0].plantWeight}kg</TableCell>
-                      <TableCell>
+                      </Skeleton>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton loading={loading}>
+                        {row.plants![0].plantWeight}kg
+                      </Skeleton>
+                    </TableCell>
+                    <TableCell>
+                      <Skeleton loading={loading}>
                         {remainingMonths(row.harvestDate)} meses (
                         {yearAndMonth(row.harvestDate)})
-                      </TableCell>
-                      <TableCell align="right" width={100}>
+                      </Skeleton>
+                    </TableCell>
+                    <TableCell align="right" width={100}>
+                      <Skeleton loading={loading}>
                         <Switch
                           name="isActive"
                           value={row.uuid}
@@ -109,8 +133,10 @@ export default function Ranches() {
                           size={"small"}
                           color={"success"}
                         />
-                      </TableCell>
-                      <TableCell align="right" width={100}>
+                      </Skeleton>
+                    </TableCell>
+                    <TableCell align="right" width={100}>
+                      <Skeleton loading={loading}>
                         <Stack justifyContent={"end"} direction={"row"}>
                           <IconButton>
                             <CollectionsIcon />
@@ -122,13 +148,13 @@ export default function Ranches() {
                             <DeleteIcon></DeleteIcon>
                           </IconButton>
                         </Stack>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-          </If>
+                      </Skeleton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
           <If condition={!ranches || ranches.length === 0}>
             <Alert color="info">No se ha creado ningún rancho</Alert>
           </If>

@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   IconButton,
+  LinearProgress,
   Paper,
   Stack,
   Switch,
@@ -27,19 +28,23 @@ import { withAuth } from "src/hofs/with-auth";
 import { UpdateUserModal } from "src/components/modals/users/update-user.modal";
 import { replaceElementAtIndex } from "src/services/api/utils/array-replace-element.util";
 import { updateUser } from "src/services/api/users/update-user.service";
-import { removeArrayElementByIndex } from "src/services/api/utils/array-remove-element.util";
 import { deleteUser } from "src/services/api/users/delete-user.service";
 import { AddUserModal } from "src/components/modals/users/add-user.modal";
+import { UserListSkeleton } from "src/components/skeletons/users-list.skeleton";
+import { Skeleton } from "src/components/skeleton";
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
   const [updateUserModalStatus, setUpdateUserModalStatus] = useState(false);
   const [addUserModalStatus, setAddUserModalStatus] = useState(false);
   const [updateUserCurrentId, setUpdateUserCurrentId] = useState("");
+  const [loading, setLoading] = useState(true);
   const confirm = useConfirm();
 
   useEffect(() => {
-    getUsers().then(setUsers);
+    getUsers()
+      .then(setUsers)
+      .finally(() => setLoading(false));
   }, []);
 
   const handleEdit = (row: User) => {
@@ -90,8 +95,6 @@ export default function Users() {
           color: "inherit",
         },
       });
-
-      console.log({ user });
 
       const updatedUser = await updateUser(user.uuid, {
         isActive: !user.isActive,
@@ -160,25 +163,35 @@ export default function Users() {
               <AddIcon /> Agregar
             </Button>
           </Stack>
-          <If condition={users?.length === 0}>
-            <Alert color="info">No se ha creado ningún usuario</Alert>
-          </If>
-          <If condition={users?.length > 0}>
+          <>
+            {!loading && users.length === 0 && (
+              <Alert color="info">No se ha creado ningún usuario</Alert>
+            )}
+          </>
+          <>
             <TableContainer component={Paper} variant="outlined">
               <Table aria-label="collapsible table" size="medium">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>Teléfono</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      <Skeleton loading={loading}>Nombre</Skeleton>
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      <Skeleton loading={loading}>Email</Skeleton>
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>
+                      <Skeleton loading={loading}>Teléfono</Skeleton>
+                    </TableCell>
                     <TableCell
                       sx={{ fontWeight: 600 }}
                       width={100}
                       align="right"
                     >
-                      Activo
+                      <Skeleton loading={loading}>Nombre</Skeleton>
                     </TableCell>
-                    <TableCell width={150}></TableCell>
+                    <TableCell width={150}>
+                      <Skeleton loading={loading}>{""}</Skeleton>
+                    </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
@@ -188,53 +201,61 @@ export default function Users() {
                       sx={{ "& > *": { borderBottom: "unset" } }}
                     >
                       <TableCell component="th" scope="row">
-                        {row?.profile?.name}
+                        <Skeleton loading={loading}>
+                          {row?.profile?.name}
+                        </Skeleton>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row.email}
+                        <Skeleton loading={loading}>{row.email}</Skeleton>
                       </TableCell>
                       <TableCell component="th" scope="row">
-                        {row?.profile?.phone}
+                        <Skeleton loading={loading}>
+                          {row?.profile?.phone}
+                        </Skeleton>
                       </TableCell>
                       <TableCell align="right" width={100}>
-                        <Switch
-                          name="isActive"
-                          value={row.uuid}
-                          checked={row.isActive}
-                          inputProps={{ "aria-label": "controlled" }}
-                          size={"small"}
-                          color={"success"}
-                          onClick={() => toogleStatus(row)}
-                        />
+                        <Skeleton loading={loading}>
+                          <Switch
+                            name="isActive"
+                            value={row.uuid}
+                            checked={row.isActive}
+                            inputProps={{ "aria-label": "controlled" }}
+                            size={"small"}
+                            color={"success"}
+                            onClick={() => toogleStatus(row)}
+                          />
+                        </Skeleton>
                       </TableCell>
                       <TableCell align="right" width={100}>
-                        <Stack
-                          justifyContent={"end"}
-                          direction={"row"}
-                          spacing={1}
-                        >
-                          <IconButton
-                            color="inherit"
-                            size="small"
-                            onClick={() => handleEdit(row)}
+                        <Skeleton loading={loading}>
+                          <Stack
+                            justifyContent={"end"}
+                            direction={"row"}
+                            spacing={1}
                           >
-                            <EditIcon></EditIcon>
-                          </IconButton>
-                          <IconButton
-                            color="error"
-                            size="small"
-                            onClick={() => handleDelete(row)}
-                          >
-                            <DeleteIcon></DeleteIcon>
-                          </IconButton>
-                        </Stack>
+                            <IconButton
+                              color="inherit"
+                              size="small"
+                              onClick={() => handleEdit(row)}
+                            >
+                              <EditIcon></EditIcon>
+                            </IconButton>
+                            <IconButton
+                              color="error"
+                              size="small"
+                              onClick={() => handleDelete(row)}
+                            >
+                              <DeleteIcon></DeleteIcon>
+                            </IconButton>
+                          </Stack>
+                        </Skeleton>
                       </TableCell>
                     </TableRow>
                   ))}
                 </TableBody>
               </Table>
             </TableContainer>
-          </If>
+          </>
         </Page>
       </Layout>
       {updateUserCurrentId && (

@@ -1,13 +1,11 @@
-import { Avatar, Box, Grid, IconButton, Typography } from "@mui/material";
+import { Box, Grid, IconButton, Typography } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import styled from "@emotion/styled";
 import SettingsIcon from "@mui/icons-material/Settings";
 import { useSelector } from "react-redux";
-import PersonIcon from "@mui/icons-material/Person";
 
 import { LetterAvatar } from "src/components/avatar";
 import { RootState } from "src/store/types/root-state.type";
-import { If } from "src/components/if";
 
 const Title = styled.div`
   display: flex;
@@ -17,6 +15,7 @@ const Title = styled.div`
 
 export function Header(props: Props) {
   const user = useSelector((root: RootState) => root.user);
+
   const handleSettingsClick = () => {
     props.onSettingsClick();
   };

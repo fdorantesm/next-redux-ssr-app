@@ -24,9 +24,7 @@ const userSlice = createSlice({
       state.profile = profile || null;
     },
     unsetUser(state: UserState) {
-      state.uuid = initialState.uuid
-      state.email = initialState.email
-      state.profile = initialState.profile
+      return initialState;
     },
   },
 });
