@@ -14,6 +14,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
 import AgricultureIcon from "@mui/icons-material/Agriculture";
 import HandshakeIcon from "@mui/icons-material/Handshake";
+import { IconButton } from "@mui/material";
 
 import { NavItem } from "./nav-item";
 import { setToken } from "src/store/modules/slices/auth.slice";
@@ -21,7 +22,6 @@ import { setUser, unsetUser } from "src/store/modules/slices/user.slice";
 import { config } from "src/config/config";
 import { AgaveIcon } from "src/components/icons/agave/agave";
 import { InvestingIcon } from "src/components/icons";
-import { IconButton } from "@mui/material";
 
 const drawerWidth = 65;
 
@@ -48,7 +48,7 @@ export function Nav({ children }: any) {
 
   const handleLogout = (e: any) => {
     e.preventDefault();
-    dispatch(setToken(""));
+    dispatch(setToken(''));
     dispatch(unsetUser());
     cookies.set("token", "");
     enqueueSnackbar("Cerrando sesión...", {
