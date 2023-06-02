@@ -27,6 +27,7 @@ import { AddInvestmentModal } from "src/components/modals/investments/add-invest
 import { formatCurrency } from "src/utils/format-currency.util";
 import { formatPercentaje } from "src/utils/format-percentage.util";
 import { Skeleton } from "src/components/skeleton";
+import { arrayFrom } from "src/utils/array-from.util";
 
 export default function Investments() {
   const [investments, setPlants] = useState<Investment[]>([]);
@@ -73,104 +74,98 @@ export default function Investments() {
             <Table aria-label="collapsible table" size="medium">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Nombre</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Rancho</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Plantas</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Superficie</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Inversión</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Venta</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Utilidad B.</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Comisión</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Utilidad N.</Skeleton>
-                  </TableCell>
-                  <TableCell align="right" width={150}>
-                    <Skeleton loading={loading}></Skeleton>
-                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Rancho</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Plantas</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Superficie</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Inversión</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Venta</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Utilidad B.</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Comisión</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Utilidad N.</TableCell>
+                  <TableCell align="right" width={150}></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
-                {investments.map((row: Investment) => (
-                  <TableRow
-                    key={row.uuid}
-                    sx={{ "& > *": { borderBottom: "unset" } }}
-                  >
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {row.user?.profile?.name}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>{row.ranch?.name}</Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {row.plantsQuantity}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {formatPercentaje(row.surfacePercentage)}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {formatCurrency(row.seedCapital)}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {formatCurrency(row.metrics?.returnal!)}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {formatCurrency(row.metrics?.grossProfit!)}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {formatCurrency(row.metrics?.fee!)}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell component="th" scope="row">
-                      <Skeleton loading={loading}>
-                        {formatCurrency(row.metrics?.netProfit!)}
-                      </Skeleton>
-                    </TableCell>
-                    <TableCell align="right" width={100}>
-                      <Skeleton loading={loading}>
-                        <Stack justifyContent={"end"} direction={"row"}>
-                          <IconButton>
-                            <SourceIcon />
-                          </IconButton>
-                          <IconButton>
-                            <EditIcon></EditIcon>
-                          </IconButton>
-                          <IconButton color="error">
-                            <DeleteIcon></DeleteIcon>
-                          </IconButton>
-                        </Stack>
-                      </Skeleton>
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {loading &&
+                  arrayFrom(10).map((item) => (
+                    <TableRow
+                      key={`investment-${item}`}
+                      sx={{ "& > *": { borderBottom: "unset" } }}
+                    >
+                      {arrayFrom(10).map((row) => (
+                        <TableCell key={`investment-${item}-${row}`}>
+                          <Skeleton loading={loading}></Skeleton>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
+                {!loading &&
+                  investments.map((row: Investment) => (
+                    <TableRow
+                      key={row.uuid}
+                      sx={{ "& > *": { borderBottom: "unset" } }}
+                    >
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {row.user?.profile?.name}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>{row.ranch?.name}</Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {row.plantsQuantity}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {formatPercentaje(row.surfacePercentage)}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {formatCurrency(row.seedCapital)}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {formatCurrency(row.metrics?.returnal!)}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {formatCurrency(row.metrics?.grossProfit!)}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {formatCurrency(row.metrics?.fee!)}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell component="th" scope="row">
+                        <Skeleton loading={loading}>
+                          {formatCurrency(row.metrics?.netProfit!)}
+                        </Skeleton>
+                      </TableCell>
+                      <TableCell align="right" width={100}>
+                        <Skeleton loading={loading}>
+                          <Stack justifyContent={"end"} direction={"row"}>
+                            <IconButton>
+                              <SourceIcon />
+                            </IconButton>
+                            <IconButton>
+                              <EditIcon></EditIcon>
+                            </IconButton>
+                            <IconButton color="error">
+                              <DeleteIcon></DeleteIcon>
+                            </IconButton>
+                          </Stack>
+                        </Skeleton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
           </TableContainer>

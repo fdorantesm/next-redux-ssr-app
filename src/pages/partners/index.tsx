@@ -15,15 +15,16 @@ import {
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
+import { useEffect, useState } from "react";
 
 import { If } from "src/components/if";
 import { Page } from "src/components/page";
 import { withAuth } from "src/hofs/with-auth";
 import { Layout } from "src/layout/default";
-import { useEffect, useState } from "react";
 import { getPartners } from "src/services/api/partners/get-partners.service";
 import { User } from "src/types/user.type";
 import { Skeleton } from "src/components/skeleton";
+import { arrayFrom } from "src/utils/array-from.util";
 
 export default function Partners() {
   const [partners, setPartners] = useState<User[]>([]);
@@ -48,24 +49,29 @@ export default function Partners() {
             <Table aria-label="collapsible table" size="medium">
               <TableHead>
                 <TableRow>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Nombre</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Teléfono</Skeleton>
-                  </TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>
-                    <Skeleton loading={loading}>Email</Skeleton>
-                  </TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Teléfono</TableCell>
+                  <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
                   <TableCell sx={{ fontWeight: 600 }} width={100} align="right">
-                    <Skeleton loading={loading}>Activo</Skeleton>
+                    Activo
                   </TableCell>
-                  <TableCell align="right" width={150}>
-                    <Skeleton loading={loading}></Skeleton>
-                  </TableCell>
+                  <TableCell align="right" width={150}></TableCell>
                 </TableRow>
               </TableHead>
               <TableBody>
+                {loading &&
+                  arrayFrom(10).map((item) => (
+                    <TableRow
+                      key={`partner-${item}`}
+                      sx={{ "& > *": { borderBottom: "unset" } }}
+                    >
+                      {arrayFrom(5).map((row) => (
+                        <TableCell key={`partner-${item}-${row}`}>
+                          <Skeleton loading={loading}></Skeleton>
+                        </TableCell>
+                      ))}
+                    </TableRow>
+                  ))}
                 {partners.map((row: User) => (
                   <TableRow
                     key={row.uuid}

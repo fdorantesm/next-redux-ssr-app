@@ -2,7 +2,6 @@ import {
   Alert,
   Button,
   IconButton,
-  LinearProgress,
   Paper,
   Stack,
   Switch,
@@ -23,15 +22,14 @@ import { Layout } from "src/layout/default";
 import { getUsers } from "src/services/api/users/get-users";
 import { User } from "src/types/user.type";
 import { Page } from "src/components/page";
-import { If } from "src/components/if";
 import { withAuth } from "src/hofs/with-auth";
 import { UpdateUserModal } from "src/components/modals/users/update-user.modal";
 import { replaceElementAtIndex } from "src/services/api/utils/array-replace-element.util";
 import { updateUser } from "src/services/api/users/update-user.service";
 import { deleteUser } from "src/services/api/users/delete-user.service";
 import { AddUserModal } from "src/components/modals/users/add-user.modal";
-import { UserListSkeleton } from "src/components/skeletons/users-list.skeleton";
 import { Skeleton } from "src/components/skeleton";
+import { arrayFrom } from "src/utils/array-from.util";
 
 export default function Users() {
   const [users, setUsers] = useState<User[]>([]);
@@ -173,28 +171,33 @@ export default function Users() {
               <Table aria-label="collapsible table" size="medium">
                 <TableHead>
                   <TableRow>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      <Skeleton loading={loading}>Nombre</Skeleton>
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      <Skeleton loading={loading}>Email</Skeleton>
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 600 }}>
-                      <Skeleton loading={loading}>Teléfono</Skeleton>
-                    </TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Email</TableCell>
+                    <TableCell sx={{ fontWeight: 600 }}>Teléfono</TableCell>
                     <TableCell
                       sx={{ fontWeight: 600 }}
                       width={100}
                       align="right"
                     >
-                      <Skeleton loading={loading}>Nombre</Skeleton>
+                      Activo
                     </TableCell>
-                    <TableCell width={150}>
-                      <Skeleton loading={loading}>{""}</Skeleton>
-                    </TableCell>
+                    <TableCell width={150}></TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
+                  {loading &&
+                    arrayFrom(10).map((item) => (
+                      <TableRow
+                        key={`user-${item}`}
+                        sx={{ "& > *": { borderBottom: "unset" } }}
+                      >
+                        {arrayFrom(5).map((row) => (
+                          <TableCell key={`user-${item}-${row}`}>
+                            <Skeleton loading={loading}></Skeleton>
+                          </TableCell>
+                        ))}
+                      </TableRow>
+                    ))}
                   {users.map((row: User) => (
                     <TableRow
                       key={row.uuid}
