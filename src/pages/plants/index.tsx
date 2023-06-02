@@ -51,7 +51,7 @@ export default function Plants() {
   };
 
   const handleCreatedPlant = (plant: Plant) => {
-    plants.push(plant);
+    setPlants((prevPlants) => [...prevPlants, plant]);
   };
 
   return (
@@ -131,7 +131,7 @@ export default function Plants() {
               </TableBody>
             </Table>
           </TableContainer>
-          <If condition={!plants || plants.length === 0}>
+          <If condition={!loading && plants.length === 0}>
             <Alert color="info">No se ha creado ningún rancho</Alert>
           </If>
         </Page>

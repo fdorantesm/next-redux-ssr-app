@@ -82,27 +82,37 @@ export function Nav({ children }: any) {
           </NavItem>
           <NavItem>
             <Link href="/plants" role="button">
-              <AgaveIcon htmlColor={config.primaryColor} />
+              <a>
+                <AgaveIcon htmlColor={config.primaryColor} />
+              </a>
             </Link>
           </NavItem>
           <NavItem>
             <Link href="/ranches" role="button">
-              <AgricultureIcon htmlColor={config.primaryColor} />
+              <a>
+                <AgricultureIcon htmlColor={config.primaryColor} />
+              </a>
             </Link>
           </NavItem>
           <NavItem>
             <Link href="/investments" role="button">
-              <InvestingIcon htmlColor={config.primaryColor} />
+              <a>
+                <InvestingIcon htmlColor={config.primaryColor} />
+              </a>
             </Link>
           </NavItem>
           <NavItem>
             <Link href="/partners" role="button">
-              <HandshakeIcon htmlColor={config.primaryColor} />
+              <a>
+                <HandshakeIcon htmlColor={config.primaryColor} />
+              </a>
             </Link>
           </NavItem>
           <NavItem>
             <Link href="/users" role="button">
-              <ManageAccountsIcon htmlColor={config.primaryColor} />
+              <a>
+                <ManageAccountsIcon htmlColor={config.primaryColor} />
+              </a>
             </Link>
           </NavItem>
         </List>

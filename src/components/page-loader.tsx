@@ -1,6 +1,6 @@
 import { LinearProgress } from "@mui/material";
 
-const PageLoader = () => {
+export function PageLoader() {
   return (
     <LinearProgress
       sx={{ height: "0.25rem" }}
@@ -13,6 +13,4 @@ const PageLoader = () => {
       }}
     />
   );
-};
-
-export default PageLoader;
+}
