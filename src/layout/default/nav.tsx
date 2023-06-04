@@ -13,7 +13,7 @@ import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
 import AgricultureIcon from "@mui/icons-material/Agriculture";
 import HandshakeIcon from "@mui/icons-material/Handshake";
-import { IconButton } from "@mui/material";
+import { IconButton, ListItem, Stack, Tooltip } from "@mui/material";
 
 import { NavItem } from "./nav-item";
 import { removeToken } from "src/store/modules/slices/auth.slice";
@@ -75,51 +75,79 @@ export function Nav({ children }: any) {
         </DrawerHeader>
         <Divider />
         <List>
-          <NavItem>
+          <ListItem>
             <Link href="/" role="button">
-              <HomeIcon htmlColor={config.primaryColor} />
+              <Tooltip title="Inicio" arrow placement="right">
+                <IconButton>
+                  <HomeIcon htmlColor={config.primaryColor} />
+                </IconButton>
+              </Tooltip>
             </Link>
-          </NavItem>
-          <NavItem>
-            <Link href="/plants" role="button">
+          </ListItem>
+          <ListItem>
+            <Link href="/plants">
               <a>
-                <AgaveIcon htmlColor={config.primaryColor} />
+                <Tooltip title="Plantas" arrow placement="right">
+                  <IconButton>
+                    <AgaveIcon htmlColor={config.primaryColor} />
+                  </IconButton>
+                </Tooltip>
               </a>
             </Link>
-          </NavItem>
-          <NavItem>
+          </ListItem>
+          <ListItem>
             <Link href="/ranches" role="button">
               <a>
-                <AgricultureIcon htmlColor={config.primaryColor} />
+                <Tooltip title="Ranchos" arrow placement="right">
+                  <IconButton>
+                    <AgricultureIcon htmlColor={config.primaryColor} />
+                  </IconButton>
+                </Tooltip>
               </a>
             </Link>
-          </NavItem>
-          <NavItem>
+          </ListItem>
+          <ListItem>
             <Link href="/investments" role="button">
               <a>
-                <InvestingIcon htmlColor={config.primaryColor} />
+                <Tooltip title="Inversiones" arrow placement="right">
+                  <IconButton>
+                    <InvestingIcon htmlColor={config.primaryColor} />
+                  </IconButton>
+                </Tooltip>
               </a>
             </Link>
-          </NavItem>
-          <NavItem>
+          </ListItem>
+          <ListItem>
             <Link href="/partners" role="button">
               <a>
-                <HandshakeIcon htmlColor={config.primaryColor} />
+                <Tooltip title="Socios" arrow placement="right">
+                  <IconButton>
+                    <HandshakeIcon htmlColor={config.primaryColor} />
+                  </IconButton>
+                </Tooltip>
               </a>
             </Link>
-          </NavItem>
-          <NavItem>
+          </ListItem>
+          <ListItem>
             <Link href="/users" role="button">
               <a>
-                <ManageAccountsIcon htmlColor={config.primaryColor} />
+                <Tooltip title="Usuarios" arrow placement="right">
+                  <IconButton>
+                    <ManageAccountsIcon htmlColor={config.primaryColor} />
+                  </IconButton>
+                </Tooltip>
               </a>
             </Link>
-          </NavItem>
+          </ListItem>
         </List>
         <Divider></Divider>
         <List sx={{ display: "flex", direction: "column", marginX: "auto" }}>
           <IconButton onClick={handleLogout}>
-            <ExitToAppIcon htmlColor={config.primaryColor} />
+            <Tooltip title="Salir" arrow placement="right">
+              <IconButton>
+                <ExitToAppIcon htmlColor={config.primaryColor} />
+              </IconButton>
+            </Tooltip>
           </IconButton>
         </List>
       </Drawer>

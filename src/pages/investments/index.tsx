@@ -1,20 +1,5 @@
-import {
-  Alert,
-  Button,
-  IconButton,
-  Paper,
-  Stack,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-} from "@mui/material";
-import EditIcon from "@mui/icons-material/Edit";
-import DeleteIcon from "@mui/icons-material/Delete";
+import { Alert, Box, Button, Stack } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
-import SourceIcon from "@mui/icons-material/Source";
 
 import { If } from "src/components/if";
 import { Page } from "src/components/page";
@@ -24,19 +9,16 @@ import { useEffect, useState } from "react";
 import { getInvestments } from "src/services/api/investments/get-investments.service";
 import { Investment } from "src/types/investment.type";
 import { AddInvestmentModal } from "src/components/modals/investments/add-investment.modal";
-import { formatCurrency } from "src/utils/format-currency.util";
-import { formatPercentaje } from "src/utils/format-percentage.util";
-import { Skeleton } from "src/components/skeleton";
-import { arrayFrom } from "src/utils/array-from.util";
+import InvestmentsList from "src/components/investments/investments-list";
 
 export default function Investments() {
-  const [investments, setPlants] = useState<Investment[]>([]);
+  const [investments, setInvestments] = useState<Investment[]>([]);
   const [addPlantModalStatus, setAddInvestmentModalStatus] = useState(false);
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     getInvestments()
-      .then(setPlants)
+      .then(setInvestments)
       .finally(() => setLoading(false));
   }, []);
 
@@ -53,7 +35,7 @@ export default function Investments() {
   };
 
   const handleCreatedPlant = (investment: Investment) => {
-    investments.push(investment);
+    setInvestments([...investments, investment]);
   };
 
   return (
@@ -70,105 +52,9 @@ export default function Investments() {
               <AddIcon /> Agregar
             </Button>
           </Stack>
-          <TableContainer component={Paper} variant="outlined">
-            <Table aria-label="collapsible table" size="medium">
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Rancho</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Plantas</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Superficie</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Inversión</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Venta</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Utilidad B.</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Comisión</TableCell>
-                  <TableCell sx={{ fontWeight: 600 }}>Utilidad N.</TableCell>
-                  <TableCell align="right" width={150}></TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {loading &&
-                  arrayFrom(10).map((item) => (
-                    <TableRow
-                      key={`investment-${item}`}
-                      sx={{ "& > *": { borderBottom: "unset" } }}
-                    >
-                      {arrayFrom(10).map((row) => (
-                        <TableCell key={`investment-${item}-${row}`}>
-                          <Skeleton loading={loading}></Skeleton>
-                        </TableCell>
-                      ))}
-                    </TableRow>
-                  ))}
-                {!loading &&
-                  investments.map((row: Investment) => (
-                    <TableRow
-                      key={row.uuid}
-                      sx={{ "& > *": { borderBottom: "unset" } }}
-                    >
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {row.user?.profile?.name}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>{row.ranch?.name}</Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {row.plantsQuantity}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {formatPercentaje(row.surfacePercentage)}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {formatCurrency(row.seedCapital)}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {formatCurrency(row.metrics?.returnal!)}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {formatCurrency(row.metrics?.grossProfit!)}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {formatCurrency(row.metrics?.fee!)}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell component="th" scope="row">
-                        <Skeleton loading={loading}>
-                          {formatCurrency(row.metrics?.netProfit!)}
-                        </Skeleton>
-                      </TableCell>
-                      <TableCell align="right" width={100}>
-                        <Skeleton loading={loading}>
-                          <Stack justifyContent={"end"} direction={"row"}>
-                            <IconButton>
-                              <SourceIcon />
-                            </IconButton>
-                            <IconButton>
-                              <EditIcon></EditIcon>
-                            </IconButton>
-                            <IconButton color="error">
-                              <DeleteIcon></DeleteIcon>
-                            </IconButton>
-                          </Stack>
-                        </Skeleton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
+          <Box>
+            <InvestmentsList data={investments} loading={loading} />
+          </Box>
           <If condition={!loading && investments.length === 0}>
             <Alert color="info">No se ha registrado ninguna inversión</Alert>
           </If>

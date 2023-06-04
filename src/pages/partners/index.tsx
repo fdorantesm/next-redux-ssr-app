@@ -11,12 +11,18 @@ import {
   Alert,
   IconButton,
   Stack,
+  TextField,
+  FormControl,
+  InputAdornment,
+  Tooltip,
 } from "@mui/material";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import AddIcon from "@mui/icons-material/Add";
 import { useEffect, useState } from "react";
 import { useConfirm } from "material-ui-confirm";
+import SearchIcon from "@mui/icons-material/Search";
+import Link from "next/link";
 
 import { If } from "src/components/if";
 import { Page } from "src/components/page";
@@ -31,18 +37,24 @@ import { replaceElementAtIndex } from "src/services/api/utils/array-replace-elem
 import { updatePartner } from "src/services/api/partners/update-partner.service";
 import { UpdatePartnerModal } from "src/components/modals/partners/update-partner.modal";
 import { AddPartnerModal } from "src/components/modals/partners/add-partner.modal";
+import { InvestingIcon } from "src/components/icons";
 
 export default function Partners() {
+  const [data, setData] = useState<User[]>([]);
   const [partners, setPartners] = useState<User[]>([]);
   const [loading, setLoading] = useState(true);
   const [updateUserModalStatus, setUpdateUserModalStatus] = useState(false);
   const [addUserModalStatus, setAddUserModalStatus] = useState(false);
   const [updatePartnerCurrentId, setUpdatePartnerCurrentId] = useState("");
+  const [search, setSearch] = useState("");
   const confirm = useConfirm();
 
   useEffect(() => {
     getPartners()
-      .then(setPartners)
+      .then((partners) => {
+        setPartners(partners);
+        setData(partners);
+      })
       .finally(() => setLoading(false));
   }, []);
 
@@ -150,6 +162,30 @@ export default function Partners() {
     setAddUserModalStatus(true);
   };
 
+  const handleSearch = (search: string) => {
+    if (search) {
+      setData(() => filterData(search));
+    } else {
+      setData(partners);
+    }
+  };
+
+  const handleSearchEnter = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === "Enter") {
+      handleSearch(search);
+    }
+  };
+
+  const filterData = (search: string) =>
+    data.filter((item) => {
+      return item.profile.name.toLowerCase().includes(search.toLowerCase());
+    });
+
+  const handleSearchChange = (e: any) => {
+    const value = e.target.value;
+    setData(value ? filterData(value) : partners);
+  };
+
   return (
     <>
       <Layout>
@@ -167,6 +203,30 @@ export default function Partners() {
           <TableContainer component={Paper} variant="outlined">
             <Table aria-label="collapsible table" size="medium">
               <TableHead>
+                <TableRow>
+                  <TableCell colSpan={5}>
+                    <Stack direction={"row"} spacing={2}>
+                      <FormControl fullWidth>
+                        <TextField
+                          fullWidth
+                          name="search"
+                          placeholder="Buscar por nombre"
+                          onChange={handleSearchChange}
+                          onKeyDown={handleSearchEnter}
+                          InputProps={{
+                            startAdornment: (
+                              <InputAdornment position="start">
+                                <IconButton disabled>
+                                  <SearchIcon />
+                                </IconButton>
+                              </InputAdornment>
+                            ),
+                          }}
+                        />
+                      </FormControl>
+                    </Stack>
+                  </TableCell>
+                </TableRow>
                 <TableRow>
                   <TableCell sx={{ fontWeight: 600 }}>Nombre</TableCell>
                   <TableCell sx={{ fontWeight: 600 }}>Teléfono</TableCell>
@@ -191,7 +251,7 @@ export default function Partners() {
                       ))}
                     </TableRow>
                   ))}
-                {partners.map((row: User) => (
+                {data.map((row: User) => (
                   <TableRow
                     key={row.uuid}
                     sx={{ "& > *": { borderBottom: "unset" } }}
@@ -225,20 +285,33 @@ export default function Partners() {
                           direction={"row"}
                           spacing={1}
                         >
-                          <IconButton
-                            color="inherit"
-                            size="small"
-                            onClick={() => handleEdit(row)}
-                          >
-                            <EditIcon></EditIcon>
-                          </IconButton>
-                          <IconButton
-                            color="error"
-                            size="small"
-                            onClick={() => handleDelete(row)}
-                          >
-                            <DeleteIcon></DeleteIcon>
-                          </IconButton>
+                          <Link href={`/partners/${row.uuid}/investments`}>
+                            <a style={{ color: "initial" }}>
+                              <Tooltip title="Inversiones" arrow>
+                                <IconButton color="inherit" size="small">
+                                  <InvestingIcon />
+                                </IconButton>
+                              </Tooltip>
+                            </a>
+                          </Link>
+                          <Tooltip title="Editar" arrow>
+                            <IconButton
+                              color="inherit"
+                              size="small"
+                              onClick={() => handleEdit(row)}
+                            >
+                              <EditIcon />
+                            </IconButton>
+                          </Tooltip>
+                          <Tooltip title="Eliminar" arrow>
+                            <IconButton
+                              color="error"
+                              size="small"
+                              onClick={() => handleDelete(row)}
+                            >
+                              <DeleteIcon />
+                            </IconButton>
+                          </Tooltip>
                         </Stack>
                       </Skeleton>
                     </TableCell>

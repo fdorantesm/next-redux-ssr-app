@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <Page title="Home" children={undefined}></Page>
+        <Page title="Home"></Page>
       </Layout>
     </>
   );

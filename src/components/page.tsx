@@ -2,8 +2,8 @@ import styled from "@emotion/styled";
 import { Box, Divider, Grid, Typography } from "@mui/material";
 
 interface PageProps {
-  title: string;
-  children: React.ReactNode;
+  title?: string;
+  children?: React.ReactNode;
 }
 
 const PageStyles = styled.div`
@@ -24,11 +24,15 @@ export function Page({ children, title }: PageProps) {
           bgcolor={"#FFF"}
         >
           <Box px={3} py={2}>
-            <Typography variant={"h6"} gutterBottom={false} mb={1}>
-              {title}
-            </Typography>
-            <Divider sx={{ marginBottom: 3 }} />
-            {children}
+            {title && (
+              <>
+                <Typography variant={"h6"} gutterBottom={false} mb={1}>
+                  {title}
+                </Typography>
+                <Divider sx={{ marginBottom: 3 }} />
+              </>
+            )}
+            {children ?? ""}
           </Box>
         </Grid>
       </Grid>
