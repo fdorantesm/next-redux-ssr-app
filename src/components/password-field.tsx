@@ -22,6 +22,7 @@ export function PasswordField(props: Props) {
       <OutlinedInput
         margin="dense"
         type={visible ? "text" : "password"}
+        placeholder="Contraseña"
         endAdornment={
           <InputAdornment position="end">
             <IconButton onClick={handleVisibleChange} edge="end">

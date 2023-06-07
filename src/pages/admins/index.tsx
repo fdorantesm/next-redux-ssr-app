@@ -103,7 +103,7 @@ export default function Users() {
   };
 
   const handleDelete = async (user: User) => {
-    const message = `Estás a punto de eliminar al usuario ${user?.email}.`;
+    const message = `Estás a punto de eliminar al administrador ${user?.email}.`;
     try {
       await confirm({
         title: "¡Atención!",
@@ -150,7 +150,7 @@ export default function Users() {
   return (
     <>
       <Layout>
-        <Page title="Usuarios">
+        <Page title="Administradores">
           <Stack justifyContent={"end"} alignItems={"end"} mb={2}>
             <Button
               color="success"
