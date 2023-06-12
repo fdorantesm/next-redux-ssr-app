@@ -41,7 +41,7 @@ export default function LoginPage() {
   const handleSubmit = async (e: SyntheticEvent) => {
     try {
       e.preventDefault();
-      const nextUrl = String(router.query.next || "/");
+      const nextUrl = String(router.query.next ?? "/");
       const token = await login(credentials.email, credentials.password);
       const accessToken = token.accessToken;
 
@@ -50,13 +50,6 @@ export default function LoginPage() {
           Authorization: `Bearer ${accessToken}`,
         },
       });
-
-      if (!user.scopes.includes("root")) {
-        enqueueSnackbar("Las credenciales no son válidas", {
-          variant: "error",
-        });
-        throw Error;
-      }
 
       dispatch(setToken(accessToken));
       dispatch(setUser(user));
@@ -94,7 +87,12 @@ export default function LoginPage() {
             }}
           >
             <Box marginBottom={3}>
-              <Image src={"/logo.svg"} width={250} height={250}></Image>
+              <Image
+                src={"/logo.svg"}
+                width={250}
+                height={250}
+                alt="Inveragave"
+              />
             </Box>
             <Box
               component="form"

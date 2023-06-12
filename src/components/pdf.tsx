@@ -1,3 +1,4 @@
+import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import * as pdfjs from "pdfjs-dist";
 import { SpecialZoomLevel, Viewer, Worker } from "@react-pdf-viewer/core";
 import { defaultLayoutPlugin } from "@react-pdf-viewer/default-layout";
@@ -13,8 +14,6 @@ import ZoomInIcon from "@mui/icons-material/ZoomIn";
 import ZoomOutIcon from "@mui/icons-material/ZoomOut";
 import SearchIcon from "@mui/icons-material/Search";
 
-import "@react-pdf-viewer/core/lib/styles/index.css";
-import "@react-pdf-viewer/default-layout/lib/styles/index.css";
 import { Json } from "src/types/json.type";
 
 export function Pdf(props: Props) {
@@ -148,31 +147,13 @@ export function Pdf(props: Props) {
       <Worker
         workerUrl={`//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`}
       >
-        <div
-          className="rpv-core__viewer"
-          style={{
-            border: "1px solid rgba(0, 0, 0, 0.3)",
-            display: "flex",
-            flexDirection: "column",
-            height: "100%",
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              overflow: "hidden",
-            }}
-          >
-            <Viewer
-              fileUrl={props.url}
-              plugins={[defaultLayoutPluginInstance]}
-              defaultScale={SpecialZoomLevel.PageFit}
-              enableSmoothScroll={true}
-              theme={"dark"}
-              localization={es_ES}
-            />
-          </div>
-        </div>
+        <Viewer
+          fileUrl={props.url}
+          plugins={[defaultLayoutPluginInstance]}
+          defaultScale={SpecialZoomLevel.PageFit}
+          theme={"dark"}
+          localization={es_ES}
+        />
       </Worker>
     </div>
   );

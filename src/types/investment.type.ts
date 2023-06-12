@@ -1,4 +1,4 @@
-import { Ranch } from "./ranche.type";
+import { Ranch } from "./ranch.type";
 import { User } from "./user.type";
 
 export type Investment = {

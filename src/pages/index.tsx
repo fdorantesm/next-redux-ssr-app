@@ -6,7 +6,7 @@ export default function Home() {
   return (
     <>
       <Layout>
-        <Page title="Home"></Page>
+        <Page></Page>
       </Layout>
     </>
   );

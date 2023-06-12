@@ -8,19 +8,13 @@ import Link from "next/link";
 import { useSnackbar } from "notistack";
 import { useDispatch } from "react-redux";
 import cookies from "js-cookie";
-import ManageAccountsIcon from "@mui/icons-material/ManageAccounts";
 import ExitToAppIcon from "@mui/icons-material/ExitToApp";
 import HomeIcon from "@mui/icons-material/Home";
-import AgricultureIcon from "@mui/icons-material/Agriculture";
-import HandshakeIcon from "@mui/icons-material/Handshake";
-import { IconButton, ListItem, Stack, Tooltip } from "@mui/material";
+import { IconButton, ListItem, Tooltip } from "@mui/material";
 
-import { NavItem } from "./nav-item";
 import { removeToken } from "src/store/modules/slices/auth.slice";
 import { unsetUser } from "src/store/modules/slices/user.slice";
 import { config } from "src/config/config";
-import { AgaveIcon } from "src/components/icons/agave/agave";
-import { InvestingIcon } from "src/components/icons";
 import { useRouter } from "next/router";
 
 const drawerWidth = 65;
@@ -82,61 +76,6 @@ export function Nav({ children }: any) {
                   <HomeIcon htmlColor={config.primaryColor} />
                 </IconButton>
               </Tooltip>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/plants">
-              <a>
-                <Tooltip title="Plantas" arrow placement="right">
-                  <IconButton>
-                    <AgaveIcon htmlColor={config.primaryColor} />
-                  </IconButton>
-                </Tooltip>
-              </a>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/ranches" role="button">
-              <a>
-                <Tooltip title="Ranchos" arrow placement="right">
-                  <IconButton>
-                    <AgricultureIcon htmlColor={config.primaryColor} />
-                  </IconButton>
-                </Tooltip>
-              </a>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/investments" role="button">
-              <a>
-                <Tooltip title="Inversiones" arrow placement="right">
-                  <IconButton>
-                    <InvestingIcon htmlColor={config.primaryColor} />
-                  </IconButton>
-                </Tooltip>
-              </a>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/partners" role="button">
-              <a>
-                <Tooltip title="Socios" arrow placement="right">
-                  <IconButton>
-                    <HandshakeIcon htmlColor={config.primaryColor} />
-                  </IconButton>
-                </Tooltip>
-              </a>
-            </Link>
-          </ListItem>
-          <ListItem>
-            <Link href="/users" role="button">
-              <a>
-                <Tooltip title="Usuarios" arrow placement="right">
-                  <IconButton>
-                    <ManageAccountsIcon htmlColor={config.primaryColor} />
-                  </IconButton>
-                </Tooltip>
-              </a>
             </Link>
           </ListItem>
         </List>

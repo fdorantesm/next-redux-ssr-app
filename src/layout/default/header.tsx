@@ -1,7 +1,6 @@
 import { Box, Grid, IconButton, Typography } from "@mui/material";
 import DashboardIcon from "@mui/icons-material/Dashboard";
 import styled from "@emotion/styled";
-import SettingsIcon from "@mui/icons-material/Settings";
 import { useSelector } from "react-redux";
 
 import { LetterAvatar } from "src/components/avatar";
@@ -16,10 +15,6 @@ const Title = styled.div`
 export function Header(props: Props) {
   const user = useSelector((root: RootState) => root.user);
 
-  const handleSettingsClick = () => {
-    props.onSettingsClick();
-  };
-
   return (
     <header style={{ margin: "1rem 0 2rem" }}>
       <Grid container>
@@ -29,20 +24,12 @@ export function Header(props: Props) {
               <Title>
                 <DashboardIcon fontSize={"large"} sx={{ mr: 1 }} />
                 <Typography variant="h6" color="initial">
-                  Panel de Administración
+                  Dashboard
                 </Typography>
               </Title>
             </Grid>
             <Grid item md={6}>
               <Box sx={{ display: "flex", justifyContent: "end" }}>
-                <IconButton
-                  onClick={handleSettingsClick}
-                  size="small"
-                  sx={{ mr: 1 }}
-                  disableRipple
-                >
-                  <SettingsIcon />
-                </IconButton>
                 <IconButton>
                   {user.profile && (
                     <LetterAvatar value={user.profile.name!}></LetterAvatar>

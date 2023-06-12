@@ -8,7 +8,6 @@ import { useRouter } from "next/router";
 import { Footer } from "./footer";
 import { Header } from "./header";
 import { Nav } from "./nav";
-import { SettingsModal } from "src/components/modals/settings/settings.modal";
 import { RootState } from "src/store/types/root-state.type";
 
 const LayoutStyles = styled.div`
@@ -65,11 +64,6 @@ export const Layout = (props: ScriptProps) => {
           </PageStyles>
         </>
       </LayoutStyles>
-      <SettingsModal
-        isOpen={settingsModalState}
-        handleClose={handleSettingsModalClose}
-        handleCancel={handleSettingsModalCancel}
-      />
     </>
   );
 };
